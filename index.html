@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dantas Amador | Advocacia Estratégica</title>
+    
+    <!-- Google Fonts: Inter e Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        da: {
+                            black: '#2b2b2b',
+                            dark: '#575757',
+                            gray: '#b3b0b1',
+                            light: '#ececec',
+                            white: '#ffffff',
+                            gold: '#c4a676'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Bibliotecas de Animação: GSAP + ScrollTrigger + Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <style>
+        /* Base e Reset */
+        body, html { margin: 0; padding: 0; background-color: #ececec; cursor: none; }
+        ::selection { background: #c4a676; color: #fff; }
+        
+        /* Cursor Customizado */
+        .custom-cursor {
+            width: 12px; height: 12px;
+            background-color: #c4a676;
+            border-radius: 50%;
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, mix-blend-mode 0.3s;
+            mix-blend-mode: exclusion;
+        }
+        .custom-cursor.hovered {
+            width: 50px; height: 50px;
+            background-color: rgba(255,255,255,0.9);
+            mix-blend-mode: difference;
+        }
+        @media (max-width: 768px) { .custom-cursor { display: none; } body, html { cursor: auto; } }
+
+        /* Preloader */
+        #preloader {
+            position: fixed; inset: 0; background: #2b2b2b; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; items-center; color: #fff;
+        }
+        .loader-line {
+            width: 0%; height: 1px; background: #c4a676; margin-top: 20px; transition: width 1.5s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        /* Utilidades Apple Style */
+        .glass-nav {
+            background: rgba(236, 236, 236, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .text-reveal-mask { overflow: hidden; display: inline-block; }
+        .text-reveal-inner { display: inline-block; transform: translateY(110%); }
+
+        /* Geometria Monograma (Ref: Pág 21 e 22) */
+        .da-frame { position: relative; }
+        .da-frame::before {
+            content: ''; position: absolute; border: 1px solid #575757;
+            top: -15px; left: -15px; right: 15px; bottom: 15px; z-index: 0; transition: transform 0.5s ease;
+        }
+        .da-frame::after {
+            content: ''; position: absolute; border: 1px solid #b3b0b1;
+            top: 15px; left: 15px; right: -15px; bottom: -15px; z-index: 0; transition: transform 0.5s ease;
+        }
+        .da-frame:hover::before { transform: translate(5px, 5px); }
+        .da-frame:hover::after { transform: translate(-5px, -5px); }
+        .da-frame img { position: relative; z-index: 10; }
+
+        /* Magnet Button */
+        .magnetic-btn { display: inline-flex; align-items: center; justify-content: center; }
+
+        /* Parallax Image Wrapper */
+        .img-wrap { overflow: hidden; }
+        .img-parallax { width: 100%; height: 120%; object-fit: cover; }
+
+        /* Marquee Infinita */
+        .marquee-wrapper { overflow: hidden; white-space: nowrap; width: 100%; }
+        .marquee { display: inline-block; padding-left: 2rem; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+    </style>
+</head>
+<body class="bg-da-light text-da-black font-sans antialiased">
+
+    <!-- Cursor -->
+    <div class="custom-cursor" id="cursor"></div>
+
+    <!-- Preloader -->
+    <div id="preloader" class="flex items-center justify-center">
+        <div class="text-center overflow-hidden">
+            <h1 class="font-serif text-4xl tracking-widest text-da-light transform translate-y-full preloader-text">DANTAS AMADOR</h1>
+            <div class="w-full flex justify-center"><div class="loader-line" id="loader-line"></div></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full top-0 z-50 glass-nav transition-transform duration-500 py-5" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="font-serif text-3xl tracking-widest text-da-black hoverable">DA</a>
+            
+            <div class="hidden md:flex space-x-12 text-xs uppercase tracking-[0.2em] font-medium text-da-dark">
+                <a href="#experiencia" class="hoverable hover:text-da-gold transition-colors">A Boutique</a>
+                <a href="#atuacao" class="hoverable hover:text-da-gold transition-colors">Especialidade</a>
+                <a href="#robson" class="hoverable hover:text-da-gold transition-colors">O Sócio</a>
+            </div>
+            
+            <a href="#contato" class="hidden md:inline-block border border-da-black px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-da-black hover:text-da-white transition-all duration-300 hoverable magnetic-btn">
+                Contato
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-da-black">
+        <div class="absolute inset-0 z-0">
+            <!-- Imagem P&B luxuosa de arquitetura/escritório -->
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop" alt="Escritório" class="w-full h-full object-cover opacity-20 grayscale scale-110" id="hero-img">
+            <div class="absolute inset-0 bg-gradient-to-b from-da-black/40 via-transparent to-da-light"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center mt-20">
+            <div class="overflow-hidden mb-6">
+                <h2 class="text-xs md:text-sm font-semibold tracking-[0.4em] uppercase text-da-gold transform translate-y-full hero-elem">
+                    Direito Tributário
+                </h2>
+            </div>
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-8 text-da-white">
+                <span class="text-reveal-mask"><span class="text-reveal-inner hero-title">Advocacia madura,</span></span><br>
+                <span class="text-reveal-mask"><span class="text-reveal-inner hero-title">estratégica e confiável.</span></span>
+            </h1>
+        </div>
+        
+        <!-- Indicador de Scroll -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-0 hero-elem">
+            <span class="text-[10px] uppercase tracking-widest text-da-dark mb-3">Rolar para descobrir</span>
+            <div class="w-[1px] h-12 bg-da-dark overflow-hidden relative">
+                <div class="w-full h-full bg-da-gold absolute top-[-100%] animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+            </div>
+        </div>
+    </header>
+
+    <style>@keyframes scrollLine { 0% { top: -100%; } 100% { top: 100%; } }</style>
+
+    <!-- Seção Marquee (Atributos) -->
+    <div class="py-6 border-b border-t border-da-gray/30 bg-da-light flex text-da-black/40 font-serif italic text-2xl md:text-4xl">
+        <div class="marquee-wrapper">
+            <div class="marquee hoverable">
+                Autoridade &nbsp;&nbsp;—&nbsp;&nbsp; Especialização &nbsp;&nbsp;—&nbsp;&nbsp; Confiança &nbsp;&nbsp;—&nbsp;&nbsp; Discrição &nbsp;&nbsp;—&nbsp;&nbsp; Excelência &nbsp;&nbsp;—&nbsp;&nbsp; 
+            </div>
+            <div class="marquee hoverable">
+                Autoridade &nbsp;&nbsp;—&nbsp;&nbsp; Especialização &nbsp;&nbsp;—&nbsp;&nbsp; Confiança &nbsp;&nbsp;—&nbsp;&nbsp; Discrição &nbsp;&nbsp;—&nbsp;&nbsp; Excelência &nbsp;&nbsp;—&nbsp;&nbsp; 
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Experiência & Boutique (Layout Assimétrico Apple) -->
+    <section id="experiencia" class="py-32 bg-da-light">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <!-- Coluna Texto -->
+                <div class="lg:col-span-5 relative z-10">
+                    <span class="text-xs uppercase tracking-[0.3em] font-semibold text-da-gold mb-4 block gs-reveal">26 Anos de Trajetória</span>
+                    <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl text-da-black leading-tight mb-8 gs-reveal">
+                        A força da<br>nossa marca.
+                    </h2>
+                    <p class="text-da-dark text-lg font-light leading-relaxed mb-6 gs-reveal">
+                        Somos uma boutique jurídica especializada. Nossa essência está na união entre experiência técnica refinada e uma atuação estratégica impecável.
+                    </p>
+                    <p class="text-da-dark text-lg font-light leading-relaxed mb-10 gs-reveal">
+                        Mais do que oferecer serviços jurídicos, a Dantas Amador busca proporcionar <strong class="font-medium text-da-black">segurança para decisões que envolvem patrimônio, negócios e planejamento</strong> de grandes corporações.
+                    </p>
+                </div>
+                
+                <!-- Coluna Imagem com Frame Geométrico do Monograma -->
+                <div class="lg:col-span-7 gs-reveal px-4 md:px-10 mt-10 lg:mt-0">
+                    <div class="da-frame hoverable">
+                        <div class="img-wrap h-[500px]">
+                            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop" alt="Profissionalismo" class="img-parallax grayscale">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Robson Amador (Dark Contrast Mode) -->
+    <section id="robson" class="py-32 bg-da-black text-da-white relative overflow-hidden">
+        <!-- Monograma DA gigante no fundo -->
+        <div class="absolute -right-20 top-1/2 transform -translate-y-1/2 font-serif text-[40vh] text-da-dark opacity-10 pointer-events-none select-none">
+            DA
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div class="gs-reveal order-2 md:order-1">
+                    <div class="img-wrap h-[600px] w-full md:w-4/5 mx-auto da-frame">
+                        <!-- Substituir pela foto real do Robson -->
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Dr. Robson Amador" class="img-parallax grayscale">
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center order-1 md:order-2">
+                    <span class="text-xs uppercase tracking-[0.3em] font-semibold text-da-gold mb-4 gs-reveal block">Autoridade & Credibilidade</span>
+                    <h2 class="font-serif text-4xl md:text-5xl text-da-white leading-tight mb-8 gs-reveal">Robson Amador</h2>
+                    <div class="w-12 h-[1px] bg-da-dark mb-8 gs-reveal"></div>
+                    <p class="text-da-gray text-lg font-light leading-relaxed mb-6 gs-reveal">
+                        À frente da nossa atuação está uma combinação rara entre sólida experiência prática e profundo conhecimento acadêmico.
+                    </p>
+                    <p class="text-da-gray text-lg font-light leading-relaxed gs-reveal">
+                        Especialista e mestre em Direito Tributário, professor e escritor na área. Robson Amador conduz uma equipe com foco na compreensão de questões tributárias complexas para estruturar as soluções mais eficientes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Atuação (Cards Hover de Alta Qualidade) -->
+    <section id="atuacao" class="py-32 bg-da-light">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+                <div class="max-w-2xl">
+                    <h2 class="font-serif text-4xl md:text-5xl text-da-black mb-6 gs-reveal">Áreas de Especialização</h2>
+                    <p class="text-da-dark font-light text-lg gs-reveal">Focados em clientes (classes A e B) que valorizam experiência e discrição em operações sensíveis.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-l border-da-gray/40 gs-reveal">
+                
+                <!-- Card 1 -->
+                <div class="group relative border-r border-b border-da-gray/40 p-12 bg-transparent hover:bg-da-black transition-colors duration-500 hoverable">
+                    <div class="text-da-black group-hover:text-da-gold transition-colors duration-500 mb-8">
+                        <svg class="w-10 h-10 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <h3 class="font-serif text-2xl text-da-black group-hover:text-da-white transition-colors duration-500 mb-4">Consultoria & Planejamento</h3>
+                    <p class="text-da-dark group-hover:text-da-gray font-light text-sm leading-relaxed transition-colors duration-500">
+                        Estruturação tributária segura, antecipando cenários e gerando otimização fiscal para empresas e seus sócios.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group relative border-r border-b border-da-gray/40 p-12 bg-transparent hover:bg-da-black transition-colors duration-500 hoverable">
+                    <div class="text-da-black group-hover:text-da-gold transition-colors duration-500 mb-8">
+                        <svg class="w-10 h-10 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"></path></svg>
+                    </div>
+                    <h3 class="font-serif text-2xl text-da-black group-hover:text-da-white transition-colors duration-500 mb-4">Contencioso Estratégico</h3>
+                    <p class="text-da-dark group-hover:text-da-gray font-light text-sm leading-relaxed transition-colors duration-500">
+                        Defesa ativa em cobranças de tributos, autos de infração e execuções fiscais, revertendo passivos com alta precisão técnica.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group relative border-r border-b border-da-gray/40 p-12 bg-transparent hover:bg-da-black transition-colors duration-500 hoverable">
+                    <div class="text-da-black group-hover:text-da-gold transition-colors duration-500 mb-8">
+                        <svg class="w-10 h-10 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 12H3m18 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-serif text-2xl text-da-black group-hover:text-da-white transition-colors duration-500 mb-4">Patrimônio & Negócios</h3>
+                    <p class="text-da-dark group-hover:text-da-gray font-light text-sm leading-relaxed transition-colors duration-500">
+                        Análise de reflexos tributários voltados à sucessão familiar, holdings e organização financeira de grandes patrimônios.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Grandioso -->
+    <footer id="contato" class="bg-da-black text-da-white pt-32 pb-10 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            
+            <div class="flex flex-col items-center text-center mb-24 gs-reveal">
+                <span class="text-da-gold tracking-[0.3em] text-xs font-semibold uppercase mb-6">Atendimento Exclusivo</span>
+                <h2 class="font-serif text-4xl md:text-6xl mb-12">Segurança para suas decisões.</h2>
+                
+                <a href="#" class="magnetic-btn border border-da-gold text-da-gold hover:bg-da-gold hover:text-da-black px-12 py-5 text-sm uppercase tracking-widest font-semibold transition-all duration-300 hoverable">
+                    Agendar Reunião
+                </a>
+            </div>
+
+            <div class="border-t border-da-dark/50 pt-16 flex flex-col md:flex-row justify-between items-start gap-10">
+                <div>
+                    <!-- Logo no rodapé conforme manual pág 27 -->
+                    <h3 class="font-serif text-3xl tracking-wide mb-1">DANTAS AMADOR</h3>
+                    <p class="text-[10px] tracking-[0.3em] text-da-gray uppercase mb-8">Sociedade de Advogados</p>
+                    
+                    <a href="mailto:contato@dantasamador.com.br" class="block text-da-gray hover:text-da-white transition-colors hoverable mb-2">contato@dantasamador.com.br</a>
+                    <a href="tel:+551199999999" class="block text-da-gray hover:text-da-white transition-colors hoverable">+55 (11) 9999-9999</a>
+                </div>
+
+                <div class="text-right">
+                    <p class="text-da-dark text-sm mb-2">Av. Paulista, 1000 - Bela Vista<br>São Paulo, SP</p>
+                </div>
+            </div>
+
+            <div class="mt-20 flex flex-col md:flex-row justify-between items-center text-xs text-da-dark font-light">
+                <p>&copy; 2026 Dantas Amador. Todos os direitos reservados.</p>
+                <a href="#" class="hover:text-da-white transition-colors mt-4 md:mt-0 hoverable">Política de Privacidade</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts: Inicialização de tudo -->
+    <script>
+        // 1. Inicializar Lenis (Smooth Scroll)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing elegante
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Integrar GSAP com Lenis
+        gsap.ticker.add((time)=>{
+            lenis.raf(time * 1000)
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // 2. Cursor Customizado "Magnético"
+        const cursor = document.getElementById('cursor');
+        const hoverables = document.querySelectorAll('.hoverable, a, button');
+
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: "power2.out"
+            });
+        });
+
+        hoverables.forEach(elem => {
+            elem.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            elem.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Efeito Magnético nos botões
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+            });
+        });
+
+        // 3. Preloader & Animação de Entrada
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            
+            // Texto do preloader sobe
+            tl.to('.preloader-text', { y: 0, duration: 1, ease: "power4.out" })
+              // Linha expande
+              .to('.loader-line', { width: '100%', duration: 1, ease: "power2.inOut" }, "-=0.5")
+              // Tela preta sobe (fade out)
+              .to('#preloader', { yPercent: -100, duration: 1.2, ease: "power4.inOut" })
+              
+              // Começa animação do Hero
+              .to('#hero-img', { scale: 1, duration: 2, ease: "power2.out" }, "-=1")
+              .to('.hero-title', { y: 0, duration: 1.2, stagger: 0.2, ease: "power4.out" }, "-=1.5")
+              .to('.hero-elem', { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power2.out" }, "-=1");
+        });
+
+        // 4. GSAP Scroll Animators
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hide/Show Navbar on Scroll Down/Up
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        
+        lenis.on('scroll', (e) => {
+            const currentScrollY = e.animatedScroll;
+            if (currentScrollY > 100) {
+                if (currentScrollY > lastScrollY) {
+                    navbar.style.transform = 'translateY(-100%)'; // Scroll down: hide
+                } else {
+                    navbar.style.transform = 'translateY(0)'; // Scroll up: show
+                }
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        // Reveal Elements no Scroll
+        const revealElements = document.querySelectorAll('.gs-reveal');
+        revealElements.forEach((el) => {
+            gsap.fromTo(el, 
+                { y: 60, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%", // Inicia quando o topo do elemento chega a 85% da tela
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Imagens Parallax Suave
+        const imgWrappers = document.querySelectorAll('.img-wrap');
+        imgWrappers.forEach(wrap => {
+            const img = wrap.querySelector('.img-parallax');
+            gsap.to(img, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: wrap,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
