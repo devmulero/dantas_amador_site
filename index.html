@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dantas Amador | Advocacia Estratégica</title>
+    <title>Dantas Amador | Sociedade de Advogados</title>
     
     <!-- Google Fonts: Inter e Playfair Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,23 +69,23 @@
         /* Preloader */
         #preloader {
             position: fixed; inset: 0; background: #2b2b2b; z-index: 10000;
-            display: flex; flex-direction: column; justify-content: center; items-center; color: #fff;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff;
         }
         .loader-line {
-            width: 0%; height: 1px; background: #c4a676; margin-top: 20px; transition: width 1.5s cubic-bezier(0.8, 0, 0.2, 1);
+            width: 0%; height: 1px; background: #c4a676; margin-top: 10px; margin-bottom: 10px; transition: width 1.5s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
         /* Utilidades Apple Style */
         .glass-nav {
-            background: rgba(236, 236, 236, 0.6);
+            background: rgba(236, 236, 236, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(179, 176, 177, 0.2);
         }
         .text-reveal-mask { overflow: hidden; display: inline-block; }
         .text-reveal-inner { display: inline-block; transform: translateY(110%); }
 
-        /* Geometria Monograma (Ref: Pág 21 e 22) */
+        /* Geometria Monograma */
         .da-frame { position: relative; }
         .da-frame::before {
             content: ''; position: absolute; border: 1px solid #575757;
@@ -95,9 +95,20 @@
             content: ''; position: absolute; border: 1px solid #b3b0b1;
             top: 15px; left: 15px; right: -15px; bottom: -15px; z-index: 0; transition: transform 0.5s ease;
         }
-        .da-frame:hover::before { transform: translate(5px, 5px); }
-        .da-frame:hover::after { transform: translate(-5px, -5px); }
-        .da-frame img { position: relative; z-index: 10; }
+        .da-frame:hover::before { transform: translate(5px, 5px); border-color: #c4a676; }
+        .da-frame:hover::after { transform: translate(-5px, -5px); border-color: #c4a676; }
+        .da-frame img, .da-frame .content { position: relative; z-index: 10; }
+
+        /* Logo Square Frame */
+        .logo-square-frame { position: relative; padding: 20px; }
+        .logo-square-frame::before {
+            content: ''; position: absolute; border: 1px solid #575757;
+            top: 0; left: 0; right: 10px; bottom: 10px; z-index: 0;
+        }
+        .logo-square-frame::after {
+            content: ''; position: absolute; border: 1px solid #c4a676;
+            top: 10px; left: 10px; right: 0; bottom: 0; z-index: 0;
+        }
 
         /* Magnet Button */
         .magnetic-btn { display: inline-flex; align-items: center; justify-content: center; }
@@ -119,16 +130,22 @@
 
     <!-- Preloader -->
     <div id="preloader" class="flex items-center justify-center">
-        <div class="text-center overflow-hidden">
-            <h1 class="font-serif text-4xl tracking-widest text-da-light transform translate-y-full preloader-text">DANTAS AMADOR</h1>
+        <div class="text-center overflow-hidden flex flex-col items-center">
+            <h1 class="font-serif text-3xl md:text-4xl tracking-[0.15em] text-da-light transform translate-y-full preloader-text">DANTAS AMADOR</h1>
             <div class="w-full flex justify-center"><div class="loader-line" id="loader-line"></div></div>
+            <p class="text-[10px] tracking-[0.3em] uppercase text-da-gray opacity-0 hero-elem">Sociedade de Advogados</p>
         </div>
     </div>
 
     <!-- Navbar -->
-    <nav class="fixed w-full top-0 z-50 glass-nav transition-transform duration-500 py-5" id="navbar">
+    <nav class="fixed w-full top-0 z-50 glass-nav transition-transform duration-500 py-4" id="navbar">
         <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-            <a href="#" class="font-serif text-3xl tracking-widest text-da-black hoverable">DA</a>
+            
+            <a href="#" class="group flex flex-col items-center hoverable py-2">
+                <span class="font-serif text-xl md:text-2xl tracking-[0.15em] text-da-black group-hover:text-da-gold transition-colors duration-300">DANTAS AMADOR</span>
+                <span class="w-full h-[1px] bg-da-gold my-[4px] scale-x-100 group-hover:scale-x-50 transition-transform duration-500"></span>
+                <span class="text-[7px] md:text-[8px] uppercase tracking-[0.35em] text-da-dark font-medium">Sociedade de Advogados</span>
+            </a>
             
             <div class="hidden md:flex space-x-12 text-xs uppercase tracking-[0.2em] font-medium text-da-dark">
                 <a href="#experiencia" class="hoverable hover:text-da-gold transition-colors">A Boutique</a>
@@ -145,9 +162,8 @@
     <!-- Hero Section -->
     <header class="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-da-black">
         <div class="absolute inset-0 z-0">
-            <!-- Imagem P&B luxuosa de arquitetura/escritório -->
             <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop" alt="Escritório" class="w-full h-full object-cover opacity-20 grayscale scale-110" id="hero-img">
-            <div class="absolute inset-0 bg-gradient-to-b from-da-black/40 via-transparent to-da-light"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-da-black/50 via-da-black/20 to-da-light"></div>
         </div>
 
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center mt-20">
@@ -185,7 +201,7 @@
         </div>
     </div>
 
-    <!-- Seção: Experiência & Boutique (Layout Assimétrico Apple) -->
+    <!-- Seção: Experiência & Boutique -->
     <section id="experiencia" class="py-32 bg-da-light">
         <div class="max-w-7xl mx-auto px-6 md:px-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -215,21 +231,27 @@
         </div>
     </section>
 
-    <!-- Seção: Robson Amador (Dark Contrast Mode) -->
+    <!-- Seção: Robson Amador -->
     <section id="robson" class="py-32 bg-da-black text-da-white relative overflow-hidden">
-        <!-- Monograma DA gigante no fundo -->
-        <div class="absolute -right-20 top-1/2 transform -translate-y-1/2 font-serif text-[40vh] text-da-dark opacity-10 pointer-events-none select-none">
-            DA
+        
+        <!-- Monograma movido para trás da FOTO (-left-32), para não atrapalhar a leitura do texto na direita -->
+        <div class="absolute -left-32 top-1/2 transform -translate-y-1/2 opacity-[0.03] pointer-events-none select-none gs-reveal z-0">
+            <div class="logo-square-frame scale-[3] md:scale-[5]">
+                <span class="font-serif text-9xl text-da-light">DA</span>
+            </div>
         </div>
 
         <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- Foto -->
                 <div class="gs-reveal order-2 md:order-1">
-                    <div class="img-wrap h-[600px] w-full md:w-4/5 mx-auto da-frame">
+                    <div class="img-wrap h-[600px] w-full md:w-4/5 mx-auto da-frame border-da-dark">
                         <!-- Substituir pela foto real do Robson -->
                         <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Dr. Robson Amador" class="img-parallax grayscale">
                     </div>
                 </div>
+                
+                <!-- Texto - Agora com fundo totalmente limpo para fácil leitura -->
                 <div class="flex flex-col justify-center order-1 md:order-2">
                     <span class="text-xs uppercase tracking-[0.3em] font-semibold text-da-gold mb-4 gs-reveal block">Autoridade & Credibilidade</span>
                     <h2 class="font-serif text-4xl md:text-5xl text-da-white leading-tight mb-8 gs-reveal">Robson Amador</h2>
@@ -245,13 +267,13 @@
         </div>
     </section>
 
-    <!-- Seção: Atuação (Cards Hover de Alta Qualidade) -->
+    <!-- Seção: Atuação -->
     <section id="atuacao" class="py-32 bg-da-light">
         <div class="max-w-7xl mx-auto px-6 md:px-12">
             <div class="flex flex-col md:flex-row justify-between items-end mb-20">
                 <div class="max-w-2xl">
                     <h2 class="font-serif text-4xl md:text-5xl text-da-black mb-6 gs-reveal">Áreas de Especialização</h2>
-                    <p class="text-da-dark font-light text-lg gs-reveal">Focados em clientes (classes A e B) que valorizam experiência e discrição em operações sensíveis.</p>
+                    <p class="text-da-dark font-light text-lg gs-reveal">Focados em clientes que valorizam experiência e discrição em operações sensíveis e de alto valor.</p>
                 </div>
             </div>
 
@@ -293,7 +315,7 @@
         </div>
     </section>
 
-    <!-- Footer Grandioso -->
+    <!-- Footer Grandioso com Novos Dados -->
     <footer id="contato" class="bg-da-black text-da-white pt-32 pb-10 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-12">
             
@@ -301,29 +323,83 @@
                 <span class="text-da-gold tracking-[0.3em] text-xs font-semibold uppercase mb-6">Atendimento Exclusivo</span>
                 <h2 class="font-serif text-4xl md:text-6xl mb-12">Segurança para suas decisões.</h2>
                 
-                <a href="#" class="magnetic-btn border border-da-gold text-da-gold hover:bg-da-gold hover:text-da-black px-12 py-5 text-sm uppercase tracking-widest font-semibold transition-all duration-300 hoverable">
+                <a href="https://wa.me/5513981966600" target="_blank" class="magnetic-btn border border-da-gold text-da-gold hover:bg-da-gold hover:text-da-black px-12 py-5 text-sm uppercase tracking-widest font-semibold transition-all duration-300 hoverable">
                     Agendar Reunião
                 </a>
             </div>
 
-            <div class="border-t border-da-dark/50 pt-16 flex flex-col md:flex-row justify-between items-start gap-10">
-                <div>
-                    <!-- Logo no rodapé conforme manual pág 27 -->
-                    <h3 class="font-serif text-3xl tracking-wide mb-1">DANTAS AMADOR</h3>
-                    <p class="text-[10px] tracking-[0.3em] text-da-gray uppercase mb-8">Sociedade de Advogados</p>
-                    
-                    <a href="mailto:contato@dantasamador.com.br" class="block text-da-gray hover:text-da-white transition-colors hoverable mb-2">contato@dantasamador.com.br</a>
-                    <a href="tel:+551199999999" class="block text-da-gray hover:text-da-white transition-colors hoverable">+55 (11) 9999-9999</a>
+            <div class="border-t border-da-dark/50 pt-16 flex flex-col lg:flex-row justify-between items-start gap-12">
+                
+                <!-- Logo Exato do Manual Aplicado no Rodapé -->
+                <div class="flex flex-col items-start hoverable cursor-pointer group mb-4 lg:mb-0">
+                    <h3 class="font-serif text-2xl md:text-3xl tracking-[0.15em] text-da-white group-hover:text-da-gold transition-colors duration-300">DANTAS AMADOR</h3>
+                    <div class="w-full h-[1px] bg-da-gold my-2 transform origin-left group-hover:scale-x-110 transition-transform duration-500"></div>
+                    <p class="text-[9px] md:text-[10px] tracking-[0.35em] text-da-gray uppercase">Sociedade de Advogados</p>
                 </div>
 
-                <div class="text-right">
-                    <p class="text-da-dark text-sm mb-2">Av. Paulista, 1000 - Bela Vista<br>São Paulo, SP</p>
+                <!-- Lista de Contatos Reconstruída -->
+                <div class="w-full lg:w-auto">
+                    <ul class="flex flex-col space-y-4 text-da-gray font-light text-sm md:text-base">
+                        
+                        <!-- Telefone -->
+                        <li class="flex items-center justify-start lg:justify-end gap-4 group">
+                            <a href="tel:+5513981966600" class="hover:text-da-white transition-colors hoverable text-left lg:text-right">
+                                (13) 98196-6600 &nbsp;|&nbsp; (13) 3224-2877
+                            </a>
+                            <div class="w-8 h-8 rounded-full bg-da-gold flex-shrink-0 flex items-center justify-center text-da-black group-hover:bg-da-white transition-colors order-first lg:order-last">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            </div>
+                        </li>
+                        
+                        <!-- Instagram -->
+                        <li class="flex items-center justify-start lg:justify-end gap-4 group">
+                            <a href="https://instagram.com/profrobsonamador" target="_blank" class="hover:text-da-white transition-colors hoverable text-left lg:text-right">
+                                @profrobsonamador
+                            </a>
+                            <div class="w-8 h-8 rounded-full bg-da-gold flex-shrink-0 flex items-center justify-center text-da-black group-hover:bg-da-white transition-colors order-first lg:order-last">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            </div>
+                        </li>
+                        
+                        <!-- Email -->
+                        <li class="flex items-center justify-start lg:justify-end gap-4 group">
+                            <a href="mailto:robson.amador@dantasamador.adv.br" class="hover:text-da-white transition-colors hoverable text-left lg:text-right">
+                                robson.amador@dantasamador.adv.br
+                            </a>
+                            <div class="w-8 h-8 rounded-full bg-da-gold flex-shrink-0 flex items-center justify-center text-da-black group-hover:bg-da-white transition-colors order-first lg:order-last">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                        </li>
+                        
+                        <!-- Website (com o novo ícone do Globo) -->
+                        <li class="flex items-center justify-start lg:justify-end gap-4 group">
+                            <a href="https://dantasamador.adv.br" target="_blank" class="hover:text-da-white transition-colors hoverable text-left lg:text-right">
+                                dantasamador.adv.br
+                            </a>
+                            <div class="w-8 h-8 rounded-full bg-da-gold flex-shrink-0 flex items-center justify-center text-da-black group-hover:bg-da-white transition-colors order-first lg:order-last">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18" />
+                                </svg>
+                            </div>
+                        </li>
+                        
+                        <!-- Address -->
+                        <li class="flex items-start justify-start lg:justify-end gap-4 group">
+                            <a href="https://maps.app.goo.gl/..." target="_blank" class="hover:text-da-white transition-colors hoverable text-left lg:text-right">
+                                Av. Senador Feijó, 686 - CJ 623<br>Vila Mathias - CEP 11.015-504 - Santos | SP
+                            </a>
+                            <div class="w-8 h-8 rounded-full bg-da-gold flex-shrink-0 flex items-center justify-center text-da-black group-hover:bg-da-white transition-colors order-first lg:order-last mt-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
             <div class="mt-20 flex flex-col md:flex-row justify-between items-center text-xs text-da-dark font-light">
                 <p>&copy; 2026 Dantas Amador. Todos os direitos reservados.</p>
-                <a href="#" class="hover:text-da-white transition-colors mt-4 md:mt-0 hoverable">Política de Privacidade</a>
             </div>
         </div>
     </footer>
@@ -333,7 +409,7 @@
         // 1. Inicializar Lenis (Smooth Scroll)
         const lenis = new Lenis({
             duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing elegante
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             direction: 'vertical',
             gestureDirection: 'vertical',
             smooth: true,
@@ -389,23 +465,21 @@
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
             
-            // Texto do preloader sobe
             tl.to('.preloader-text', { y: 0, duration: 1, ease: "power4.out" })
-              // Linha expande
               .to('.loader-line', { width: '100%', duration: 1, ease: "power2.inOut" }, "-=0.5")
-              // Tela preta sobe (fade out)
-              .to('#preloader', { yPercent: -100, duration: 1.2, ease: "power4.inOut" })
+              .to('.hero-elem', { opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.5")
+              .to('#preloader', { yPercent: -100, duration: 1.2, ease: "power4.inOut", delay: 0.5 })
               
               // Começa animação do Hero
               .to('#hero-img', { scale: 1, duration: 2, ease: "power2.out" }, "-=1")
               .to('.hero-title', { y: 0, duration: 1.2, stagger: 0.2, ease: "power4.out" }, "-=1.5")
-              .to('.hero-elem', { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power2.out" }, "-=1");
+              .to('header .hero-elem', { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power2.out" }, "-=1");
         });
 
         // 4. GSAP Scroll Animators
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hide/Show Navbar on Scroll Down/Up
+        // Hide/Show Navbar
         let lastScrollY = window.scrollY;
         const navbar = document.getElementById('navbar');
         
@@ -413,9 +487,9 @@
             const currentScrollY = e.animatedScroll;
             if (currentScrollY > 100) {
                 if (currentScrollY > lastScrollY) {
-                    navbar.style.transform = 'translateY(-100%)'; // Scroll down: hide
+                    navbar.style.transform = 'translateY(-100%)'; 
                 } else {
-                    navbar.style.transform = 'translateY(0)'; // Scroll up: show
+                    navbar.style.transform = 'translateY(0)'; 
                 }
             } else {
                 navbar.style.transform = 'translateY(0)';
@@ -435,7 +509,7 @@
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 85%", // Inicia quando o topo do elemento chega a 85% da tela
+                        start: "top 85%",
                         toggleActions: "play none none reverse"
                     }
                 }
